@@ -1,16 +1,20 @@
-const express = require('express')
-const Promise = require('bluebird')
 const sqlite = require('sqlite')
+const Promise = require('bluebird')
+
+const express = require('express')
+const cors = require('cors')
 const bodyParser = require('body-parser')
 
 const app = express()
 const port = 3001
 const dbPromise = sqlite.open('./database.sqlite', { Promise })
 
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 async function run(stmt, ...args) {
+	log(args)
 	const db = await dbPromise
 	return await db.run(stmt, ...args)
 }
